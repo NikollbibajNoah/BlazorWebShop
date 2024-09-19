@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using WebShop.Client.Pages;
 using WebShop.Components;
+using WebShop.DB;
 using WebShop.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +13,11 @@ builder.Services.AddRazorComponents()
 
 ///DI
 builder.Services.AddSingleton<ItemsService>();
-builder.Services.AddSingleton<ProductService>();
+builder.Services.AddScoped<ProductService>();
+
+///DB
+builder.Services.AddDbContext<StoreDBContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

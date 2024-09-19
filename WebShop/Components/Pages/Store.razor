@@ -33,45 +33,15 @@
 
     public List<ItemData> List = [];
 
-
     private string popup = "opacity: 0; transform: translateX(100%);";
     private int popupDuration = 5000;//ms 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-
-        List = ProductService.GetItems();
+        List = await ProductService.LoadItemsFromDB();
 
         Service.Items = List;
     }
-
-
-    // protected override async void OnInitialized()
-    // {
-    //     base.OnInitialized();
-
-    //     ///Clear List
-    //     Service.Items.Clear();
-
-
-
-
-    //     // for (var i = 0; i < ItemsCount; i++)
-    //     // {
-    //     //     var tempId = i + 1;
-    //     //     var rand = (decimal)new Random().Next(1, 100);
-    //     //     var category = "Accessory";
-
-    //     //     ///Add In List
-    //     //     ItemData temp = new ItemData();
-    //     //     temp.Id = tempId;
-    //     //     temp.Price = rand;
-    //     //     temp.Category = category;
-
-    //     //     Service.AddItem(temp);
-    //     // }
-    // }
 
     public async Task Click(bool hasClicked)
     {

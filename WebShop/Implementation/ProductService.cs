@@ -1,15 +1,23 @@
-﻿using System.Text.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using WebShop.Data;
+using WebShop.DB;
 using WebShop.Model;
 
 namespace WebShop.Implementation
 {
     public class ProductService
     {
-        //public List<ItemData> Items { get; set; }
-        public ProductService() {
-      
+        private readonly StoreDBContext _dbContext;
+
+        public ProductService(StoreDBContext context) {
+            _dbContext = context;
+        }
+
+        public async Task<List<ItemData>> LoadItemsFromDB()
+        {
+            return await _dbContext.StoreItems.ToListAsync();
         }
 
         public List<ItemData> GetItems()
