@@ -1,0 +1,75 @@
+﻿@page "/store/item/{id:int}"
+@page "/cart/item/{id:int}"
+
+@inject NavigationManager NM;
+@inject ItemsService Service;
+@rendermode InteractiveServer
+
+<PageTitle>Item @Id</PageTitle>
+
+<main>
+    <h1>Product Details</h1>
+    
+    <div class="image">
+        <!--Img Here-->
+    </div>
+
+    <h3>@CurrentItem.Name</h3>
+
+    <div class="description">
+        <h5>Item Description</h5>
+        <p><b>Price: </b>@CurrentItem.Price.ToString("F2") CHF</p>
+        <p><b>Category: </b>@CurrentItem.Category</p>
+        <p><b>Type: </b>@CurrentItem.Type</p>
+        <br />
+        
+        @* Check if Page is from Store *@
+        @if (CurrentPage.Split("/")[0].ToLower() == "store")
+        {
+            <button class="btn btn-primary" @onclick="AddItemToCart">Add To Shopping Cart</button>
+            
+        }
+    </div>
+
+    <div class="message" style="@popup">
+        <span><b>Added to shopping cart!</b></span>
+        <br />
+        <a href="/cart">See Shopping Cart</a
+    </div>
+    
+</main>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public ItemData CurrentItem { get; set; }
+    private string CurrentPage { get; set; }
+
+    ///Css 
+    private string popup = "opacity: 0; transform: translateX(100%);";
+    private int popupDuration = 5000;//
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        ///Get Right Item By Id
+        CurrentItem = Service.Items.FirstOrDefault((item) => item.Id == Id);
+
+        //URL Page
+        CurrentPage = NM.ToBaseRelativePath(NM.Uri);
+    }
+
+    public async Task AddItemToCart()
+    {
+        ///Activate Pop Up
+        Service.AddItemToCart(CurrentItem);
+
+        popup = "opacity: 1; translateX(0%);";
+
+        await Task.Delay(popupDuration);
+        popup = "opacity: 0; transform: translateX(100%);";
+    }
+}

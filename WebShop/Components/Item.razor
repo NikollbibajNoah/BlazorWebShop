@@ -1,0 +1,57 @@
+﻿@inject ItemsService Service;
+
+<li>
+    <div class="item-content">
+        <div class="item-img">
+           
+        </div>
+
+        <div class="item-description">
+            <div class="title"><b>@title</b></div>
+            <div class="sub"><b>Price: </b>@CurrentItem.Price.ToString("F2") CHF</div>
+            <div class="sub"><b>Category: </b>@CurrentItem.Category</div>
+            <a href="@($"/store/item/{CurrentItem.Id}")">Details</a>
+
+            <button class="btn btn-primary" @onclick="AddItemToCart">Add</button>
+        </div>
+    </div>
+</li>
+
+@code {
+
+    [Parameter]
+    public ItemData CurrentItem { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> SetClickedEvent { get; set; }
+    private bool HasClicked = false;
+
+
+    private string title = "";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        title = CurrentItem.Name;
+
+        var l = 25;
+        if (title.Length > l)
+        {
+            title = title.Substring(0, l) +"...";
+        }
+    }
+
+    public async Task AddItemToCart()
+    {
+        ///Activate Pop Up
+        Service.AddItemToCart(CurrentItem);
+
+
+        HasClicked = true;
+
+        await SetClickedEvent.InvokeAsync(HasClicked);
+
+        HasClicked = false;
+    }
+}

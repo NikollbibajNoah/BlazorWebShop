@@ -1,0 +1,86 @@
+﻿@page "/store"
+@inject ItemsService Service
+@inject ProductService ProductService
+@rendermode InteractiveServer
+
+<PageTitle>Store</PageTitle>
+
+<h1>Store</h1>
+
+<div class="container">
+    <div class="items-header">
+        <p><b>All Items:</b> @List.Count</p>
+    </div>
+    <div class="items-content">
+        <ul class="items-list">
+            @foreach(var item in List)
+            {
+                <Item CurrentItem="@item" SetClickedEvent="@Click"/>
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="message" style="@popup">
+    <span><b>Added to shopping cart!</b></span>
+    <br />
+    <a href="/cart">See Shopping Cart</a>
+</div>
+
+@code {
+
+    public bool HasClicked;
+
+    public List<ItemData> List = [];
+
+
+    private string popup = "opacity: 0; transform: translateX(100%);";
+    private int popupDuration = 5000;//ms 
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        List = ProductService.GetItems();
+
+        Service.Items = List;
+    }
+
+
+    // protected override async void OnInitialized()
+    // {
+    //     base.OnInitialized();
+
+    //     ///Clear List
+    //     Service.Items.Clear();
+
+
+
+
+    //     // for (var i = 0; i < ItemsCount; i++)
+    //     // {
+    //     //     var tempId = i + 1;
+    //     //     var rand = (decimal)new Random().Next(1, 100);
+    //     //     var category = "Accessory";
+
+    //     //     ///Add In List
+    //     //     ItemData temp = new ItemData();
+    //     //     temp.Id = tempId;
+    //     //     temp.Price = rand;
+    //     //     temp.Category = category;
+
+    //     //     Service.AddItem(temp);
+    //     // }
+    // }
+
+    public async Task Click(bool hasClicked)
+    {
+        HasClicked = hasClicked;
+        popup = "opacity: 1; translateX(0%);";
+
+        await Task.Delay(popupDuration);
+        popup = "opacity: 0; transform: translateX(100%);";
+
+        HasClicked = false;
+    }
+}

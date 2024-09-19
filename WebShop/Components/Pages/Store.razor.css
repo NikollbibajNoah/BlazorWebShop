@@ -1,0 +1,41 @@
+﻿* {
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    /* border: 2px solid red; */
+}
+
+.items-header {
+    padding: 10px 0;
+}
+
+.items-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style-type: none;
+}
+
+.message {
+    position: fixed;
+    bottom: 10vh;
+    right: 0;
+    z-index: 99;
+    padding: 12px;
+    background: royalblue;
+    padding-right: 48px;
+    font-size: 16pt;
+    color: white;
+    opacity: 0;
+    transition: 300ms opacity ease-in-out, 300ms transform ease-in-out;
+}
+
+.message a {
+    color: #cecece;
+    font-size: 11pt;
+}
+

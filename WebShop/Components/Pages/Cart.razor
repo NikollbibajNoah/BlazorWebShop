@@ -1,0 +1,44 @@
+﻿@page "/cart"
+@* @page "/cart/extralink" *@
+@rendermode InteractiveServer
+@inject ItemsService Service
+
+
+<h1>Cart</h1>
+ 
+<h4>Your Items: @Items.Count</h4>
+
+
+@if (Items.Count > 0)
+{
+    <div class="cart-list">
+        @foreach (var i in Items)
+        {
+            <CartItem Item="@i" DeleteItem="DeletItemFromList" />
+        }
+    </div>
+} else
+{
+    <div class="container">
+        <p>Go to <a href="/store">Store</a> and explore amazing products!</p>
+    </div>
+}
+
+
+@code {
+    public List<ItemData> Items = [];
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Items = Service.CartItems;
+    }
+
+
+    public async Task DeletItemFromList(ItemData item)
+    {
+        Service.RemoveFromCart(item);
+    }
+}
