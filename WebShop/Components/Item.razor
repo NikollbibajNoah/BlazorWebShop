@@ -10,9 +10,20 @@
             <div class="title"><b>@title</b></div>
             <div class="sub"><b>Price: </b>@CurrentItem.Price.ToString("F2") CHF</div>
             <div class="sub"><b>Category: </b>@CurrentItem.Category</div>
-            <a href="@($"/store/item/{CurrentItem.Id}")">Details</a>
+            
+            <div class="actions">
+                <a href="@($"/store/item/{CurrentItem.Id}")">
+                    <span class="material-symbols-outlined">
+                        info
+                    </span>
+                </a>
 
-            <button class="btn btn-primary" @onclick="AddItemToCart">Add</button>
+                <button class="btn btn-primary" @onclick="AddItemToCart">
+                    <span class="material-symbols-outlined">
+                        add_shopping_cart
+                    </span>
+                </button>
+            </div>
         </div>
     </div>
 </li>
@@ -44,7 +55,7 @@
 
     public async Task AddItemToCart()
     {
-        ///Activate Pop Up
+        ///Add To Shopping Cart
         Service.AddItemToCart(CurrentItem);
 
 

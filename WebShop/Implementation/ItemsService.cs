@@ -5,18 +5,11 @@ namespace WebShop.Implementation
 
     public class ItemsService
     {
-        public List<ItemData> Items { get; set; }
         public List<ItemData> CartItems { get; set; }
 
         public ItemsService()
         {
-            Items = [];
             CartItems = [];
-        }
-
-        public void AddItem(ItemData item)
-        {
-            Items.Add(item);
         }
 
         public void AddItemToCart(ItemData item)

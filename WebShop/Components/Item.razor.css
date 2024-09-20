@@ -39,7 +39,14 @@
     font-size: 10pt;
 }
 
+
+.actions a {
+    padding: 6px;
+}
 button {
     font-size: 12pt;
     float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,8 +1,9 @@
 ﻿@page "/store/item/{id:int}"
 @page "/cart/item/{id:int}"
 
-@inject NavigationManager NM;
-@inject ItemsService Service;
+@inject NavigationManager NM
+@inject ItemsService Service
+@inject ProductService ProductService
 @rendermode InteractiveServer
 
 <PageTitle>Item @Id</PageTitle>
@@ -55,18 +56,25 @@
     {
         base.OnInitialized();
 
-        ///Get Right Item By Id
-        CurrentItem = Service.Items.FirstOrDefault((item) => item.Id == Id);
-
         //URL Page
         CurrentPage = NM.ToBaseRelativePath(NM.Uri);
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        ///Get Right Item By Id
+        var temp = await ProductService.LoadItemsFromDB();
+
+        CurrentItem = temp.FirstOrDefault((item) => item.Id == Id);
+    }
+
+
     public async Task AddItemToCart()
     {
-        ///Activate Pop Up
+        ///Add Shopping Cart
         Service.AddItemToCart(CurrentItem);
 
+        ///Activate Pop Up
         popup = "opacity: 1; translateX(0%);";
 
         await Task.Delay(popupDuration);

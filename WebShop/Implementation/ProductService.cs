@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using WebShop.Data;
 using WebShop.DB;
 using WebShop.Model;
 
@@ -10,41 +7,18 @@ namespace WebShop.Implementation
     public class ProductService
     {
         private readonly StoreDBContext _dbContext;
-
         public ProductService(StoreDBContext context) {
             _dbContext = context;
         }
 
         public async Task<List<ItemData>> LoadItemsFromDB()
         {
-            return await _dbContext.StoreItems.ToListAsync();
+           return await _dbContext.StoreItems.ToListAsync();
         }
 
-        public List<ItemData> GetItems()
+        public async Task<List<ItemData>> FilterItemsByPrice(int min, int max)
         {
-            List<ItemData> items = new List<ItemData>();
-
-            var jsonString = File.ReadAllText("./Data/Data.json");
-            List<DataModell> Data = JsonSerializer.Deserialize<List<DataModell>>(jsonString);
-
-            for (var i = 0; i < Data.Count; i++)
-            {
-                ItemData temp = new ItemData();
-                temp.Id = i;
-                temp.Name = Data[i].Name;
-                temp.Category = Data[i].Category;
-                temp.Type = Data[i].Type;
-                temp.Price = decimal.Parse(Data[i].Price);
-
-                items.Add(temp);
-            }
-
-            return items;
+            return await _dbContext.StoreItems.Where((item) => item.Price >= min && item.Price <= max).ToListAsync();
         }
-
-        //public async Task<List<ItemData>> LoadData()
-        //{
-        //    return await _httpClient.GetFromJsonAsync<List<ItemData>>("Data/Data.json");
-        //}
     }
 }

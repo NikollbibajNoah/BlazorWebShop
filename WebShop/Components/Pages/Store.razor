@@ -1,46 +1,89 @@
 ﻿@page "/store"
-@inject ItemsService Service
 @inject ProductService ProductService
+@inject ItemsService Service
 @rendermode InteractiveServer
 
 <PageTitle>Store</PageTitle>
 
 <h1>Store</h1>
 
-<div class="container">
-    <div class="items-header">
-        <p><b>All Items:</b> @List.Count</p>
+<main>
+    <div class="container">
+        <div class="container-content">
+            <div class="items-header">
+                <div class="info">
+                    <p><b>All Items:</b> @List.Count</p>
+                </div>
+                 
+                <br />
+
+                <div class="actions">
+                    <h3>Filter</h3>
+                    <div class="price">
+                        <input placeholder="min" type="number" min="1" max="9999" @bind="Min"/>
+                        <input placeholder="max" type="number" min="1" max="9999" @bind="Max"/>
+
+                        <button class="btn btn-primary" @onclick="FilterStore">
+                            <span class="material-symbols-outlined">
+                                search
+                            </span>
+                        </button>
+
+                        <button class="btn btn-primary" @onclick="ResetFilter">
+                            <span class="material-symbols-outlined">
+                                backspace
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="items-content">
+                <ul class="items-list">
+                    @if (isFiltered)
+                    {
+                        @foreach (var item in FilteredList)
+                        {
+                            <Item CurrentItem="@item" SetClickedEvent="@Click" />
+                        }
+                    } else
+                    {
+                        @foreach (var item in List)
+                        {
+                            <Item CurrentItem="@item" SetClickedEvent="@Click" />
+                        }
+                    }
+                    
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="items-content">
-        <ul class="items-list">
-            @foreach(var item in List)
-            {
-                <Item CurrentItem="@item" SetClickedEvent="@Click"/>
-            }
-        </ul>
-    </div>
-</div>
+</main>
+
 
 <div class="message" style="@popup">
     <span><b>Added to shopping cart!</b></span>
     <br />
-    <a href="/cart">See Shopping Cart</a>
+    <a href="/cart">See Shopping Cart</a><span class="badge">@Service.CartItems.Count</span>
 </div>
 
 @code {
-
     public bool HasClicked;
 
     public List<ItemData> List = [];
 
+    ///Filter Settings
+    public List<ItemData> FilteredList = [];
+    public bool isFiltered = false;
+    public int Min { get; set; }
+    public int Max { get; set; }
+
+    ///Styling
     private string popup = "opacity: 0; transform: translateX(100%);";
     private int popupDuration = 5000;//ms 
 
     protected override async Task OnInitializedAsync()
     {
         List = await ProductService.LoadItemsFromDB();
-
-        Service.Items = List;
     }
 
     public async Task Click(bool hasClicked)
@@ -52,5 +95,20 @@
         popup = "opacity: 0; transform: translateX(100%);";
 
         HasClicked = false;
+    }
+
+    public async Task FilterStore()
+    {
+        FilteredList = await ProductService.FilterItemsByPrice(Min, Max);
+        isFiltered = true;
+    }
+
+    public void ResetFilter()
+    {
+        isFiltered = false;
+
+        //Clear Inputs
+        Min = 0;
+        Max = 0;
     }
 }

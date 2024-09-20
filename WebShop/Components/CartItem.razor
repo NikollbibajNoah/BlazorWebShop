@@ -10,7 +10,12 @@
                 <div class="price">Price: @Item.Price.ToString("F2") CHF</div>
                 <div class="category">Category: @Item.Category</div>
                 <br />
-                <a href="@($"/cart/item/{Item.Id}")">Details</a>
+                <a href="@($"/cart/item/{Item.Id}")">
+                    <span class="material-symbols-outlined">
+                        info
+                    </span>
+                </a>
+
             </div>
         </div>
         <div class="item-actions">

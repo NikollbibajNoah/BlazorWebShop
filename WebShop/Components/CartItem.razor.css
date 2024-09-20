@@ -70,9 +70,9 @@
     transition: 400ms border ease-in-out;
 }
 
-    .actions input:focus {
-        border: 4px solid #0b98f8;
-    }
+.actions input:focus {
+    border: 4px solid #0b98f8;
+}
 
 .actions button {
     display: block;
