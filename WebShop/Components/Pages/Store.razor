@@ -12,7 +12,7 @@
         <div class="container-content">
             <div class="items-header">
                 <div class="info">
-                    <p><b>All Items:</b> @List.Count</p>
+                    <p><b>All Items:</b> @(isFiltered ? FilteredList.Count : List.Count)</p>
                 </div>
                  
                 <br />
@@ -22,6 +22,14 @@
                     <div class="price">
                         <input placeholder="min" type="number" min="1" max="9999" @bind="Min"/>
                         <input placeholder="max" type="number" min="1" max="9999" @bind="Max"/>
+
+                        @* <div class="highest-lowest">
+                            <label for="sum">Sort By</label>
+                            <select name="sum" id="sum" class="dropdown" @bind=Option>
+                                <option value="in">Increasing</option>
+                                <option value="de">Decreasing</option>
+                            </select>
+                        </div> *@
 
                         <button class="btn btn-primary" @onclick="FilterStore">
                             <span class="material-symbols-outlined">
@@ -35,6 +43,8 @@
                             </span>
                         </button>
                     </div>
+
+                    
                 </div>
             </div>
             <div class="items-content">
@@ -52,7 +62,6 @@
                             <Item CurrentItem="@item" SetClickedEvent="@Click" />
                         }
                     }
-                    
                 </ul>
             </div>
         </div>
@@ -77,6 +86,8 @@
     public int Min { get; set; }
     public int Max { get; set; }
 
+    public string Option { get; set; } = "de";
+
     ///Styling
     private string popup = "opacity: 0; transform: translateX(100%);";
     private int popupDuration = 5000;//ms 
@@ -100,7 +111,18 @@
     public async Task FilterStore()
     {
         FilteredList = await ProductService.FilterItemsByPrice(Min, Max);
+
+        // if (Option == "de")
+        // {
+        //     FilteredList.Sort();
+        // }
+        // else if (Option == "in")
+        // {
+        //     FilteredList.Reverse();
+        // }
+
         isFiltered = true;
+
     }
 
     public void ResetFilter()

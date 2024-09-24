@@ -41,7 +41,7 @@ main {
     margin-top: 16px;
     display: flex;
     justify-content: space-evenly;
-    height: 50px;
+    height: 60px;
 }
 
 .actions .price input {
@@ -66,6 +66,25 @@ main {
     justify-content: center;
     align-items: center;
     margin: 0 12px;
+}
+
+
+.price .highest-lowest {
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.highest-lowest .dropdown {
+    display: inline-block;
+    outline: none;
+    border-radius: 12px;
+    padding: 4px;
+    border: 4px solid gray;
+    transition: 400ms border ease-in-out;
+}
+
+.highest-lowest .dropdown:focus {
+    border: 4px solid #0b98f8;
 }
 
 .items-content {
